@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}CinePredict{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <!-- Header commun -->
+    <header class="bg-dark text-white py-3">
+        <div class="container">
+            <h1>CinePredict</h1>
+            <nav>
+                <a href="/" class="text-white me-3">Accueil</a>
+                <a href="/graphs" class="text-white">Graphiques</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Contenu de la page -->
+    <main class="container mt-4">
+        {% block content %}
+        <!-- Contenu des pages filles -->
+        {% endblock %}
+    </main>
+
+    <!-- Footer commun -->
+    <footer class="bg-dark text-white py-3 mt-5">
+        <div class="container text-center">
+            <p>&copy; 2025 CinePredict. Tous droits réservés.</p>
+        </div>
+    </footer>
+</body>
+
+</html>
