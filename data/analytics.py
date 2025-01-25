@@ -31,32 +31,39 @@ plt.tight_layout()
 plt.savefig(os.path.join(output_dir, "repartition_cinemas_par_departement.png"))
 plt.close()
 
-# 2. Capacité moyenne en sièges selon le statut Multiplexe
-cinema_data["Multiplexe"] = cinema_data["Multiplexe"].str.upper()  # Uniformiser "OUI" et "NON"
-multiplexe_mean_seats = cinema_data.groupby("Multiplexe")["fauteuils"].mean()
+# Répartition des entrées totales par département
+dept_entrees = cinema_data.groupby("Département")["entrées 2020"].sum().sort_values()
 
-plt.figure(figsize=(6, 4))
-multiplexe_mean_seats.plot(kind="bar", color=["blue", "orange"], width=0.6)
-plt.title("Capacité moyenne en sièges par type de cinéma")
-plt.xlabel("Multiplexe")
-plt.ylabel("Nombre moyen de sièges")
-plt.xticks(rotation=0)
+plt.figure(figsize=(10, 6))
+dept_entrees.plot(kind="bar", color="skyblue")
+plt.title("Répartition des entrées totales par département (2020)")
+plt.xlabel("Département")
+plt.ylabel("Nombre total d'entrées")
 plt.tight_layout()
-plt.savefig(os.path.join(output_dir, "capacite_moyenne_sieges_par_multiplexe.png"))
+plt.savefig(os.path.join(output_dir, "repartition_entrees_par_departement.png"))
 plt.close()
 
-# 3. Distribution de la part de marché des films français (Art et Essai vs autres)
-cinema_data["catégorie Art et Essai"] = cinema_data["catégorie Art et Essai"].str.upper()  # Uniformiser
-art_et_essai_data = cinema_data[["catégorie Art et Essai", "PdM en entrées des films français 2020"]]
 
-plt.figure(figsize=(8, 5))
-art_et_essai_data.boxplot(by="catégorie Art et Essai", column="PdM en entrées des films français 2020", grid=False)
-plt.title("Distribution des parts de marché des films français (2020)")
-plt.suptitle("")  # Supprimer le titre par défaut
-plt.xlabel("Catégorie Art et Essai")
-plt.ylabel("Part de marché (%)")
+# Comparaison des entrées 2019 et 2020
+plt.figure(figsize=(8, 6))
+plt.scatter(cinema_data["entrées 2019"], cinema_data["entrées 2020"], alpha=0.7)
+plt.title("Comparaison des entrées 2019 vs 2020")
+plt.xlabel("Entrées 2019")
+plt.ylabel("Entrées 2020")
+plt.axline((0, 0), slope=1, color="red", linestyle="--", label="Ligne y=x")
+plt.legend()
 plt.tight_layout()
-plt.savefig(os.path.join(output_dir, "distribution_parts_marche_films_francais.png"))
+plt.savefig(os.path.join(output_dir, "comparaison_entrees_2019_2020.png"))
+plt.close()
+
+# Scatter plot des performances selon les fauteuils et entrées 2020
+plt.figure(figsize=(8, 6))
+plt.scatter(cinema_data["fauteuils"], cinema_data["entrées 2020"], alpha=0.7, color="blue")
+plt.title("Performances des cinémas : Fauteuils vs Entrées 2020")
+plt.xlabel("Nombre de fauteuils")
+plt.ylabel("Entrées 2020")
+plt.tight_layout()
+plt.savefig(os.path.join(output_dir, "performances_fauteuils_vs_entrees_2020.png"))
 plt.close()
 
 # 4. Répartition des cinémas par tranche d'entrées annuelles
