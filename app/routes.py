@@ -1,4 +1,4 @@
-# Define routes for the Flask app 
+# Define routes for the Flask app
 from flask import Blueprint, Flask, render_template
 import pandas as pd
 import plotly.express as px
@@ -19,27 +19,37 @@ app = Flask(__name__, template_folder="app/templates")
 df = pd.read_csv(file__path, sep=";")
 
 # Route pour la page d'accueil
+
+
 @routes.route("/")
 def index():
     return render_template("index.html")
 
 # Route pour afficher les graphiques
 
-@routes.route("/graphs")
+
+@routes.route("/dashboard")
 def graphs():
-    try :
+    try:
         print("Generating graphs...")
-        images = [
-            "repartition_cinemas_par_departement.png",
-            "capacite_moyenne_sieges_par_multiplexe.png",
-            "distribution_parts_marche_films_francais.png",
-            "repartition_cinemas_par_tranche_entrees.png"
-            ]
-        print(images)
-        return render_template("graphs.html", images=images)
+        graphs = [
+            {"title": "Répartition des cinémas par département",
+                "image": "repartition_cinemas_par_departement.png", "details": "details_1"},
+            {"title": "Répartition des entrées totales par département",
+                "image": "repartition_entrees_par_departement.png", "details": "details_2"},
+            {"title": "Comparaison des entrées 2019 vs 2020",
+                "image": "comparaison_entrees_2019_2020.png", "details": "details_3"},
+            {"title": "Performances des cinémas (fauteuils vs entrées 2020)",
+             "image": "performances_fauteuils_vs_entrees_2020.png", "details": "details_4"},
+            {"title": "Répartition des cinémas par tranche d'entrées annuelles",
+                "image": "repartition_cinemas_par_tranche_entrees.png", "details": "details_5"}
+
+        ]
+        return render_template("dashboard.html", graphs=graphs)
     except Exception as e:
         print("error", e)
         return "Erreur lors de la génération des graphiques"
+
 
 if __name__ == "__main__":
     app.run(debug=True)

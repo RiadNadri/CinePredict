@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block title %}Graphiques{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="text-center">Dashboard</h1>
+    <div class="row">
+        <div class="d-flex flex-wrap justify-content-center">
+            {% for graph in graphs %}
+            <div class="card m-5 text-center" style="width: 18rem; display: flex; flex-direction: column;">
+                <img class="card-img-top" src="{{ url_for('static', filename='images/' + graph.image) }}"
+                    alt="{{ graph.image }}">
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">{{graph.title}}</h5>
+                    <p class="card-text">{{graph.title}}</p>
+                    <div class="mt-auto">
+                        <a href="#" class="btn btn-primary">Détails</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}
