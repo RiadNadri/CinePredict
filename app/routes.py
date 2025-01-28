@@ -9,14 +9,14 @@ import os
 load_dotenv()
 
 # Récupérer le chemin du fichier CSV depuis les variables d'environnement
-# file__path = os.getenv("CINEMA_CSV_PATH")
+file__path = os.getenv("CINEMA_CSV_PATH")
 
 routes = Blueprint("routes", __name__, template_folder="templates")
 
 app = Flask(__name__, template_folder="app/templates")
 
 # Charger les données
-# df = pd.read_csv(file__path, sep=";")
+df = pd.read_csv(file__path, sep=";")
 
 # Route pour la page d'accueil
 
