@@ -34,15 +34,15 @@ def graphs():
         print("Generating graphs...")
         graphs = [
             {"title": "Répartition des cinémas par département",
-                "image": "repartition_cinemas_par_departement.png", "details": "details_1"},
+                "image": "repartition_cinemas_par_departement.png", "details": "Paris (75) domine avec le plus grand nombre de cinémas. Cela reflète la concentration culturelle et démographique de la capitale."},
             {"title": "Répartition des entrées totales par département",
-                "image": "repartition_entrees_par_departement.png", "details": "details_2"},
+                "image": "repartition_entrees_par_departement.png", "details": "Les entrées sont majoritairement concentrées à Paris (75), représentant plus de 7M d'entrées en 2020."},
             {"title": "Comparaison des entrées 2019 vs 2020",
-                "image": "comparaison_entrees_2019_2020.png", "details": "details_3"},
+                "image": "comparaison_entrees_2019_2020.png", "details": "La pandémie a entraîné une chute des entrées en 2020, avec une majorité des cinémas en dessous de leurs performances 2019."},
             {"title": "Performances des cinémas (fauteuils vs entrées 2020)",
-             "image": "performances_fauteuils_vs_entrees_2020.png", "details": "details_4"},
+             "image": "performances_fauteuils_vs_entrees_2020.png", "details": "Les cinémas avec un grand nombre de fauteuils ont tendance à enregistrer plus d'entrées, bien que des exceptions existent."},
             {"title": "Répartition des cinémas par tranche d'entrées annuelles",
-                "image": "repartition_cinemas_par_tranche_entrees.png", "details": "details_5"}
+                "image": "repartition_cinemas_par_tranche_entrees.png", "details": "La majorité des cinémas se situent dans les tranches de 5 000 à 20 000 entrées, reflétant une forte proportion de petites salles."}
 
         ]
         return render_template("dashboard.html", graphs=graphs)
