@@ -1,6 +1,7 @@
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestRegressor
+from xgboost import XGBRegressor
 import joblib
 
 def train_model(data_file, model_output):
@@ -8,13 +9,14 @@ def train_model(data_file, model_output):
     data = pd.read_csv(data_file)
 
     # Sélection des features et de la cible
-    X = data[['fauteuils', 'Multiplexe', 'entrées 2019']]
+    X = data[['fauteuils', 'entrées 2019', 'duree_fermeture', 'restrictions', 'taux_reprise']]
     y = data['entrées 2020']
 
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
-    # Entraînement du modèle Random Forest
-    model = RandomForestRegressor(n_estimators=100, random_state=42)
+    # Entraînement Random Forest Regressor
+    # model = RandomForestRegressor(n_estimators=100, random_state=42)
+    model = XGBRegressor(n_estimators=100, max_depth=10, learning_rate=0.1)
     model.fit(X_train, y_train)
 
     X_test.to_csv("../data/test/X_test.csv", index=False)

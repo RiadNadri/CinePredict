@@ -6,10 +6,20 @@ def preprocess_data(input_file, output_file):
 
     # Remplissage des données manquantes
     data['entrées 2019'] = data['entrées 2019'].fillna(data['entrées 2019'].mean())
+    data['entrées 2020'] = data['entrées 2020'].fillna(data['entrées 2020'].mean())
     data['fauteuils'] = data['fauteuils'].fillna(data['fauteuils'].median())
 
     # Encodage des variables catégoriques
-    data['Multiplexe'] = data['Multiplexe'].apply(lambda x: 1 if x == "OUI" else 0)
+    # data['Multiplexe'] = data['Multiplexe'].apply(lambda x: 1 if x == "OUI" else 0)
+
+    # 1. Calcul de la durée de fermeture en fonction de la baisse des entrées entre 2019 et 2020
+    data['duree_fermeture'] = (1 - (data['entrées 2020'] / data['entrées 2019'])).clip(0, 1) * 6  # Fermeture maximale de 6 mois (car COVID)
+
+    # 2. Simulation des restrictions en fonction de la baisse des entrées
+    data['restrictions'] = (1 - (data['entrées 2020'] / data['entrées 2019'])).clip(0, 1) * 100  # Restrictions entre 0 % et 100 %
+
+    # 3. Taux de reprise après réouverture
+    data['taux_reprise'] = (data['entrées 2020'] / data['entrées 2019']).clip(0, 1)
 
     # Sauvegarde des données nettoyées
     data.to_csv(output_file, index=False)
