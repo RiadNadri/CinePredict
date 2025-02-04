@@ -53,6 +53,7 @@ develop-eggs/
 .installed.cfg
 *.egg
 MANIFEST
+venv
 
 # Java
 *.class
