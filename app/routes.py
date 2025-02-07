@@ -28,9 +28,9 @@ def get_cinema_names():
     
     # Nettoyer les noms de cinémas
     df['nom'] = df['nom'].str.strip().str.replace(r'[^\x00-\x7F]+', '', regex=True)
-    # cinema_names = sorted(df['nom'].dropna().unique().tolist())
+    cinema_names = sorted(df['nom'].dropna().unique().tolist())
     
-    return df['nom'].dropna().unique().tolist()
+    return cinema_names
 
 @routes.route("/simulation")
 def simulation():
