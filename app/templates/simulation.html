@@ -17,9 +17,15 @@
     {% endwith %}
 
     <form method="POST" action="/simulate">
+        <!-- Liste déroulante des cinémas -->
         <div class="mb-3">
             <label for="cinemaName" class="form-label">Nom du Cinéma</label>
-            <input type="text" class="form-control" id="cinemaName" name="cinemaName" required>
+            <select class="form-control" id="cinemaName" name="cinemaName" required>
+                <option value="">Sélectionnez un cinéma</option>
+                {% for cinema in cinema_names %}
+                <option value="{{ cinema }}">{{ cinema }}</option>
+                {% endfor %}
+            </select>
         </div>
 
         <div class="mb-3">

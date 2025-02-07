@@ -17,10 +17,33 @@ app = Flask(__name__, template_folder="app/templates")
 
 # Charger les données
 # df = pd.read_csv(file__path, sep=";")
-#Route pour la pâge de simulation
+
+
+def get_cinema_names():
+    file_path = "data/raw/les_salles_de_cinemas_en_ile-de-france.csv"
+    df = pd.read_csv(file_path, sep=";", encoding="ISO-8859-1")
+    
+    # Supprimer les espaces vides ou les caractères invisibles
+    df['nom'] = df['nom'].str.strip()
+    
+    # Nettoyer les noms de cinémas
+    df['nom'] = df['nom'].str.strip().str.replace(r'[^\x00-\x7F]+', '', regex=True)
+    # cinema_names = sorted(df['nom'].dropna().unique().tolist())
+    
+    return df['nom'].dropna().unique().tolist()
+
 @routes.route("/simulation")
 def simulation():
-    return render_template("simulation.html")
+    cinema_names = get_cinema_names()
+    
+    # Trier les noms des cinémas par ordre alphabétique
+    
+    return render_template("simulation.html", cinema_names=cinema_names)
+
+#Route pour la pâge de simulation
+# @routes.route("/simulation")
+# def simulation():
+#     return render_template("simulation.html")
 
 # Route pour la page d'accueil
 
