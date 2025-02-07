@@ -17,6 +17,10 @@ app = Flask(__name__, template_folder="app/templates")
 
 # Charger les données
 # df = pd.read_csv(file__path, sep=";")
+#Route pour la pâge de simulation
+@routes.route("/simulation")
+def simulation():
+    return render_template("simulation.html")
 
 # Route pour la page d'accueil
 
