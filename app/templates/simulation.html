@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block title %}Simulation{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="text-center">Simulation des Fermetures de Cinéma</h1>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    <div class="alert alert-info">
+        {% for category, message in messages %}
+        <p>{{ message }}</p>
+        {% endfor %}
+    </div>
+    {% endif %}
+    {% endwith %}
+
+    <form method="POST" action="/simulate">
+        <!-- Liste déroulante pour le département -->
+        <div class="mb-3">
+            <label for="department" class="form-label">Département</label>
+            <select class="form-control" id="department" name="department" onchange="updateCinemas()" required>
+                <option value="">Sélectionnez un département</option>
+                {% for department in departments %}
+                <option value="{{ department }}">{{ department }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <!-- Liste déroulante des cinémas (dynamique) -->
+        <div class="mb-3">
+            <label for="cinemaName" class="form-label">Nom du Cinéma</label>
+            <select class="form-control" id="cinemaName" name="cinemaName" required>
+                <option value="">Sélectionnez un cinéma</option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label for="closureDuration" class="form-label">Durée de Fermeture (en jours)</label>
+            <input type="number" class="form-control" id="closureDuration" name="closureDuration" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="restrictionPercentage" class="form-label">Pourcentage de Restriction (%)</label>
+            <input type="number" class="form-control" id="restrictionPercentage" name="restrictionPercentage" min="0" max="100" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="recoveryRate" class="form-label">Taux de Reprise (%)</label>
+            <input type="number" class="form-control" id="recoveryRate" name="recoveryRate" min="0" max="100" required>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Lancer la Simulation</button>
+    </form>
+</div>
+
+<script>
+// Fonction pour mettre à jour la liste des cinémas selon le département choisi
+function updateCinemas() {
+    let department = document.getElementById('department').value;
+    fetch(`/get_cinemas?department=${department}`)
+        .then(response => response.json())
+        .then(data => {
+            let cinemaSelect = document.getElementById('cinemaName');
+            cinemaSelect.innerHTML = '<option value="">Sélectionnez un cinéma</option>';
+            data.cinemas.forEach(cinema => {
+                cinemaSelect.innerHTML += `<option value="${cinema}">${cinema}</option>`;
+            });
+        })
+        .catch(error => console.error('Erreur:', error));
+}
+</script>
+{% endblock %}
