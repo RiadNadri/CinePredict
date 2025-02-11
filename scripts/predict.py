@@ -4,6 +4,8 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import plotly.graph_objs as go
 from plotly.subplots import make_subplots
+import plotly.io as pio
+
 
 def predict_future_entries(model_file, input_data):
     # Chargement du modèle
@@ -94,7 +96,7 @@ def generate_interactive_plot(model_file, min_entrees, max_entrees, fauteuils=30
     )
 
     fig = go.Figure(data=traces, layout=layout)
-    fig.show()
+    return pio.to_html(fig, full_html=False)
 
 
 if __name__ == "__main__":

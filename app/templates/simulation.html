@@ -16,7 +16,12 @@
     {% endif %}
     {% endwith %}
 
-    <form method="POST" action="/simulate">
+    {% if plot_html %}
+    <div class="mt-5">
+        {{ plot_html|safe }}
+    </div>
+    {% endif %}
+    <form method="POST" action="/simulate" id="simulationForm">
         <!-- Liste déroulante pour le département -->
         <div class="mb-3">
             <label for="department" class="form-label">Département</label>
@@ -59,27 +64,70 @@
         <button type="submit" class="btn btn-primary">Lancer la Simulation</button>
     </form>
 
-    {% if plot_html %}
-    <div class="mt-5">
-        {{ plot_html|safe }}
+    <!-- Logo de chargement -->
+    <!-- <div id="loading" style="display: block;">
+        <img src="/static/images/loading.gif" alt="Chargement en cours...">
+    </div> -->
+
+    <div id="loading" class="clearfix" style="display: none;">
+        <div class="spinner-grow text-secondary" role="status">
+            <span class="sr-only"></span>
+        </div>
+
+        <div class="spinner-grow text-secondary" role="status">
+            <span class="sr-only"></span>
+        </div>
+        <div class="spinner-grow text-secondary" role="status">
+            <span class="sr-only"></span>
+        </div>
+        
+        <div class="spinner-grow text-secondary" role="status">
+            <span class="sr-only"></span>
+        </div>
+
+        <div class="spinner-grow text-secondary" role="status">
+            <span class="sr-only"></span>
+          </div>
     </div>
-    {% endif %}
 </div>
 
+<style>
+    #loading {
+        position: fixed;
+        top: 20%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 1000;
+    }
+
+    #loading img {
+        width: 50px;
+        /* Ajustez la taille selon vos besoins */
+        height: 50px;
+        /* Ajustez la taille selon vos besoins */
+    }
+</style>
+
 <script>
-// Fonction pour mettre à jour la liste des cinémas selon le département choisi
-function updateCinemas() {
-    let department = document.getElementById('department').value;
-    fetch(`/get_cinemas?department=${department}`)
-        .then(response => response.json())
-        .then(data => {
-            let cinemaSelect = document.getElementById('cinemaName');
-            cinemaSelect.innerHTML = '<option value="">Sélectionnez un cinéma</option>';
-            data.cinemas.forEach(cinema => {
-                cinemaSelect.innerHTML += `<option value="${cinema}">${cinema}</option>`;
-            });
-        })
-        .catch(error => console.error('Erreur:', error));
-}
+    // Fonction pour mettre à jour la liste des cinémas selon le département choisi
+    function updateCinemas() {
+        let department = document.getElementById('department').value;
+        fetch(`/get_cinemas?department=${department}`)
+            .then(response => response.json())
+            .then(data => {
+                let cinemaSelect = document.getElementById('cinemaName');
+                cinemaSelect.innerHTML = '<option value="">Sélectionnez un cinéma</option>';
+                data.cinemas.forEach(cinema => {
+                    cinemaSelect.innerHTML += `<option value="${cinema}">${cinema}</option>`;
+                });
+            })
+            .catch(error => console.error('Erreur:', error));
+    }
+
+    // Afficher le logo de chargement après la soumission du formulaire et faire remonter la page en haut
+    document.getElementById('simulationForm').addEventListener('submit', function (event) {
+        document.getElementById('loading').style.display = 'flex';
+        window.scrollTo(0, 0); // Faire remonter la page en haut
+    });
 </script>
 {% endblock %}

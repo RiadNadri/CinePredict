@@ -1,6 +1,7 @@
 from flask import Blueprint, Flask, render_template, request, jsonify, redirect, url_for, flash
 import pandas as pd
-from app.model import generate_interactive_plot  # Assurez-vous que le chemin est correct
+# from app.model import generate_interactive_plot  # Assurez-vous que le chemin est correct
+from scripts.predict import generate_interactive_plot
 
 routes = Blueprint("routes", __name__, template_folder="templates")
 
@@ -49,7 +50,7 @@ def simulate():
 
         # impact = (min_entrees + max_entrees) / 2 * restrictions / 100
 
-        plot_html = generate_interactive_plot(min_entrees, max_entrees, fauteuils, restrictions)
+        plot_html = generate_interactive_plot("models/random_forest_model.pkl" ,min_entrees, max_entrees, fauteuils, restrictions)
 
         # flash(f"Simulation réussie pour {cinema_name}. Impact estimé : {impact:.2f}")
         flash(f"Simulation réussie pour {cinema_name}.")
