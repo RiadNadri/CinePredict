@@ -9,3 +9,4 @@ gunicorn
 joblib
 xgboost 
 matplotlib
+secrets

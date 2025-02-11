@@ -1,5 +1,6 @@
 from flask import Blueprint, Flask, render_template, request, jsonify, redirect, url_for, flash
 import pandas as pd
+from app.model import generate_interactive_plot  # Assurez-vous que le chemin est correct
 
 # Blueprint et app Flask
 routes = Blueprint("routes", __name__, template_folder="templates")
@@ -50,15 +51,20 @@ def simulate():
     try:
         # Récupérer les données du formulaire
         cinema_name = request.form["cinemaName"]
-        closure_duration = int(request.form["closureDuration"])
-        restriction_percentage = float(request.form["restrictionPercentage"])
-        recovery_rate = float(request.form["recoveryRate"])
+        department = request.form["department"]
+        min_entrees = int(request.form["minEntrees"])
+        max_entrees = int(request.form["maxEntrees"])
+        fauteuils = int(request.form["fauteuils"])
+        restrictions = float(request.form["restrictions"])
 
         # Calcul de l'impact simple
-        impact = closure_duration * restriction_percentage / 100 * recovery_rate / 100
+        impact = (min_entrees + max_entrees) / 2 * restrictions / 100
+
+        # Appel à la fonction generate_interactive_plot pour générer une prédiction
+        plot_html = generate_interactive_plot(min_entrees, max_entrees, fauteuils, restrictions)
 
         flash(f"Simulation réussie pour {cinema_name}. Impact estimé : {impact:.2f}")
-        return redirect(url_for('routes.simulation'))
+        return render_template("simulation.html", departments=get_departments(), plot_html=plot_html)
     except Exception as e:
         flash(f"Erreur lors de la simulation : {str(e)}", "danger")
         return redirect(url_for('routes.simulation'))
