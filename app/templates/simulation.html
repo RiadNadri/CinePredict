@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Simulation{% endblock %}
+{% block title %}CinePredict - Prédiction{% endblock %}
 
 {% block content %}
 <div class="container mt-5">
@@ -21,7 +21,7 @@
         {{ plot_html|safe }}
     </div>
     {% endif %}
-    <form method="POST" action="/simulate" id="simulationForm">
+    <form method="POST" action="/simulate" id="simulationForm" oninput="checkForm()">
         <!-- Liste déroulante pour le département -->
         <div class="mb-3">
             <label for="department" class="form-label">Département</label>
@@ -36,7 +36,7 @@
         <!-- Liste déroulante des cinémas (dynamique) -->
         <div class="mb-3">
             <label for="cinemaName" class="form-label">Nom du Cinéma</label>
-            <select class="form-control" id="cinemaName" name="cinemaName" required>
+            <select class="form-control" id="cinemaName" name="cinemaName" onchange="updateFauteuils()" required>
                 <option value="">Sélectionnez un cinéma</option>
             </select>
         </div>
@@ -53,15 +53,16 @@
 
         <div class="mb-3">
             <label for="fauteuils" class="form-label">Nombre de fauteuils</label>
-            <input type="number" class="form-control" id="fauteuils" name="fauteuils" value="300" required>
+            <input type="number" class="form-control" id="fauteuils" name="fauteuils" required>
         </div>
 
         <div class="mb-3">
             <label for="restrictions" class="form-label">Pourcentage de restrictions</label>
-            <input type="number" class="form-control" id="restrictions" name="restrictions" value="50" required>
+            <input type="number" class="form-control" id="restrictions" name="restrictions" required>
         </div>
 
-        <button type="submit" class="btn btn-primary">Lancer la Simulation</button>
+        <button id="submitButton" style="display: none; align-items: center;" type="submit" class="btn btn-primary">Lancer la
+            Simulation</button>
     </form>
 
     <!-- Logo de chargement -->
@@ -80,14 +81,14 @@
         <div class="spinner-grow text-secondary" role="status">
             <span class="sr-only"></span>
         </div>
-        
+
         <div class="spinner-grow text-secondary" role="status">
             <span class="sr-only"></span>
         </div>
 
         <div class="spinner-grow text-secondary" role="status">
             <span class="sr-only"></span>
-          </div>
+        </div>
     </div>
 </div>
 
@@ -109,7 +110,6 @@
 </style>
 
 <script>
-    // Fonction pour mettre à jour la liste des cinémas selon le département choisi
     function updateCinemas() {
         let department = document.getElementById('department').value;
         fetch(`/get_cinemas?department=${department}`)
@@ -120,13 +120,47 @@
                 data.cinemas.forEach(cinema => {
                     cinemaSelect.innerHTML += `<option value="${cinema}">${cinema}</option>`;
                 });
+                checkForm(); // Vérifier le formulaire après la mise à jour des cinémas
             })
             .catch(error => console.error('Erreur:', error));
     }
 
-    // Afficher le logo de chargement après la soumission du formulaire et faire remonter la page en haut
+    // Fonction pour mettre à jour le nombre de fauteuils selon le cinéma choisi
+    function updateFauteuils() {
+        let cinemaName = document.getElementById('cinemaName').value;
+        if (cinemaName !== '') {
+            fetch(`/get_fauteuils?cinemaName=${cinemaName}`)
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('fauteuils').value = data.fauteuils;
+                    checkForm(); // Vérifier le formulaire après la mise à jour des fauteuils
+                })
+                .catch(error => console.error('Erreur:', error));
+        } else {
+            document.getElementById('fauteuils').value = '';
+        }
+    }
+
+    // Fonction pour vérifier si tous les champs du formulaire sont remplis
+    function checkForm() {
+        let department = document.getElementById('department').value;
+        let cinemaName = document.getElementById('cinemaName').value;
+        let minEntrees = document.getElementById('minEntrees').value;
+        let maxEntrees = document.getElementById('maxEntrees').value;
+        let fauteuils = document.getElementById('fauteuils').value;
+        let restrictions = document.getElementById('restrictions').value;
+
+        if (department && cinemaName && minEntrees && maxEntrees && fauteuils && restrictions) {
+            document.getElementById('submitButton').style.display = 'block';
+        } else {
+            document.getElementById('submitButton').style.display = 'none';
+        }
+    }
+
+    // Afficher le spinner de chargement et désactiver le bouton de soumission après la soumission du formulaire
     document.getElementById('simulationForm').addEventListener('submit', function (event) {
         document.getElementById('loading').style.display = 'flex';
+        document.getElementById('submitButton').disabled = true;
         window.scrollTo(0, 0); // Faire remonter la page en haut
     });
 </script>

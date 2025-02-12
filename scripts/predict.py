@@ -56,7 +56,7 @@ def simulate_reprise(min_entrees, max_entrees, model_file, fauteuils=300, restri
     plt.show()
 
 
-def generate_interactive_plot(model_file, min_entrees, max_entrees, fauteuils=300, restrictions=20):
+def generate_interactive_plot(model_file, min_entrees, max_entrees, fauteuils, restrictions):
 
     model = joblib.load(model_file)
 
@@ -107,4 +107,4 @@ if __name__ == "__main__":
     # ]    
     # predict_future_entries("../models/random_forest_model.pkl", future_data)
     # simulate_reprise(30000, 70000, "../models/random_forest_model.pkl", fauteuils=300, restrictions=50)
-    generate_interactive_plot("../models/random_forest_model.pkl", 30000, 70000)
+    generate_interactive_plot("../models/random_forest_model.pkl", 30000, 70000, )

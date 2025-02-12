@@ -23,6 +23,20 @@ def get_departments():
     df = load_cinema_data()
     return sorted(df.iloc[:, 1].dropna().unique().tolist())
 
+@routes.route("/get_fauteuils")
+def get_fauteuils():
+    cinema_name = request.args.get("cinemaName")
+    df = load_cinema_data()
+
+    # Filtrer le cinéma sélectionné et obtenir le nombre de fauteuils
+    result = df[df['nom'] == cinema_name]['fauteuils']
+    if not result.empty:
+        fauteuils = int(result.values[0])
+    else:
+        fauteuils = 0  # Valeur par défaut si le cinéma n'existe pas
+
+    return jsonify(fauteuils=fauteuils)
+
 @routes.route("/get_cinemas")
 def get_cinemas():
     department = request.args.get("department")
