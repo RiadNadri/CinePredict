@@ -3,6 +3,56 @@
 {% block title %}CinePredict - Accueil{% endblock %}
 
 {% block content %}
-<h2>Bienvenue sur la page d'accueil</h2>
-<p>Ceci est la page d'accueil de l'application.</p>
+<div class="container mt-5">
+    <div class="jumbotron text-center">
+        <h1 class="display-4">Bienvenue sur CinePredict</h1>
+        <p class="lead">Prédisez les entrées de votre cinéma en cas de nouvelle crise sanitaire.</p>
+        <hr class="my-4">
+        <p>Utilisez notre outil pour simuler les entrées de votre cinéma et prendre des décisions éclairées.</p>
+        <a class="btn btn-primary btn-lg" href="{{ url_for('routes.simulation') }}" role="button">Commencer la Simulation</a>
+    </div>
+
+    <div class="row mt-5">
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Analyse des données</h5>
+                    <p class="card-text">Utilisez nos outils d'analyse pour comprendre les tendances des entrées de votre cinéma.</p>
+                    <a href="{{ url_for('routes.graphs') }}" class="btn btn-outline-primary">Voir les Graphiques</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Prédictions précises</h5>
+                    <p class="card-text">Obtenez des prédictions précises basées sur des modèles de machine learning avancés.</p>
+                    <a href="{{ url_for('routes.simulation') }}" class="btn btn-outline-primary">Lancer une Simulation</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">À propos de CinePredict</h5>
+                    <p class="card-text">Découvrez comment CinePredict peut vous aider à optimiser les performances de votre cinéma.</p>
+                    <a href="#about" class="btn btn-outline-primary">En savoir plus</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-5" id="about">
+        <div class="col-md-12">
+            <h2>À propos de CinePredict</h2>
+            <p>CinePredict est une application innovante qui utilise des modèles de machine learning pour prédire les entrées de cinéma en fonction de divers facteurs tels que les taux de reprise et les restrictions sanitaires. Notre objectif est d'aider les propriétaires de cinémas à prendre des décisions éclairées et à optimiser les performances de leurs établissements.</p>
+            <p>Avec CinePredict, vous pouvez :</p>
+            <ul>
+                <li>Analyser les tendances des entrées de votre cinéma</li>
+                <li>Obtenir des prédictions précises basées sur des données historiques</li>
+                <!-- <li>Recevoir des conseils personnalisés pour améliorer les performances</li> -->
+            </ul>
+        </div>
+    </div>
+</div>
 {% endblock %}

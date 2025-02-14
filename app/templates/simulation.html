@@ -34,7 +34,6 @@
     {% endif %}
 
     <form method="POST" action="/simulate" id="simulationForm" oninput="checkForm()">
-        <!-- Liste déroulante pour le département -->
         <div class="mb-3">
             <label for="department" class="form-label">Département</label>
             <select class="form-control" id="department" name="department" onchange="updateCinemas()" required>
@@ -45,7 +44,6 @@
             </select>
         </div>
 
-        <!-- Liste déroulante des cinémas (dynamique) -->
         <div class="mb-3">
             <label for="cinemaName" class="form-label">Nom du Cinéma</label>
             <select class="form-control" id="cinemaName" name="cinemaName"
@@ -78,11 +76,6 @@
             class="btn btn-primary">Lancer la
             Simulation</button>
     </form>
-
-    <!-- Logo de chargement -->
-    <!-- <div id="loading" style="display: block;">
-        <img src="/static/images/loading.gif" alt="Chargement en cours...">
-    </div> -->
 
     <div id="loading" class="clearfix" style="display: none;">
         <div class="spinner-grow text-secondary" role="status">
@@ -117,9 +110,7 @@
 
     #loading img {
         width: 50px;
-        /* Ajustez la taille selon vos besoins */
         height: 50px;
-        /* Ajustez la taille selon vos besoins */
     }
 </style>
 
@@ -134,12 +125,11 @@
                 data.cinemas.forEach(cinema => {
                     cinemaSelect.innerHTML += `<option value="${cinema}">${cinema}</option>`;
                 });
-                checkForm(); // Vérifier le formulaire après la mise à jour des cinémas
+                checkForm(); 
             })
             .catch(error => console.error('Erreur:', error));
     }
 
-    // Fonction pour mettre à jour le nombre de fauteuils selon le cinéma choisi
     function updateFauteuils() {
         let cinemaName = document.getElementById('cinemaName').value;
         if (cinemaName !== '') {
@@ -147,7 +137,7 @@
                 .then(response => response.json())
                 .then(data => {
                     document.getElementById('fauteuils').value = data.fauteuils;
-                    checkForm(); // Vérifier le formulaire après la mise à jour des fauteuils
+                    checkForm(); 
                 })
                 .catch(error => console.error('Erreur:', error));
         } else {
@@ -155,7 +145,6 @@
         }
     }
 
-    // Fonction pour mettre à jour les entrées minimales et maximales selon le cinéma choisi
     function updateEntrees() {
         let cinemaName = document.getElementById('cinemaName').value;
         if (cinemaName !== '') {
@@ -164,7 +153,7 @@
                 .then(data => {
                     document.getElementById('minEntrees').value = data.min_entrees;
                     document.getElementById('maxEntrees').value = data.max_entrees;
-                    checkForm(); // Vérifier le formulaire après la mise à jour des entrées
+                    checkForm(); 
                 })
                 .catch(error => console.error('Erreur:', error));
         } else {
@@ -173,7 +162,6 @@
         }
     }
 
-    // Fonction pour vérifier si tous les champs du formulaire sont remplis
     function checkForm() {
         let department = document.getElementById('department').value;
         let cinemaName = document.getElementById('cinemaName').value;
@@ -189,11 +177,10 @@
         }
     }
 
-    // Afficher le spinner de chargement et désactiver le bouton de soumission après la soumission du formulaire
     document.getElementById('simulationForm').addEventListener('submit', function (event) {
         document.getElementById('loading').style.display = 'flex';
         document.getElementById('submitButton').disabled = true;
-        window.scrollTo(0, 0); // Faire remonter la page en haut
+        window.scrollTo(0, 0); 
     });
 </script>
 {% endblock %}
