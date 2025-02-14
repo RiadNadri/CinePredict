@@ -57,7 +57,6 @@ def simulate_reprise(min_entrees, max_entrees, model_file, fauteuils=300, restri
 
 
 def generate_interactive_plot(model_file, min_entrees, max_entrees, fauteuils, restrictions):
-
     model = joblib.load(model_file)
 
     # Générer les taux de reprise entre 0.1 et 1.0
@@ -67,11 +66,12 @@ def generate_interactive_plot(model_file, min_entrees, max_entrees, fauteuils, r
     entrees_intervals = np.linspace(min_entrees, max_entrees, 20)
 
     traces = []
+    conseils = []
 
     # Calcul des prédictions pour chaque combinaison
     for entrees in entrees_intervals:
         predictions = [
-            model.predict(np.array([[fauteuils, entrees, taux, restrictions,]]))[0] for taux in taux_reprise_values
+            model.predict(np.array([[fauteuils, entrees, taux, restrictions]]))[0] for taux in taux_reprise_values
         ]
 
         # Ajouter une trace pour chaque courbe d'entrées attendues
@@ -86,6 +86,14 @@ def generate_interactive_plot(model_file, min_entrees, max_entrees, fauteuils, r
         )
         traces.append(trace)
 
+        # Ajouter des conseils basés sur les prédictions
+        if max(predictions) > 50000:
+            conseils.append(f"Pour des attentes de {int(entrees)}, les prédictions sont élevées. Considérez d'augmenter les capacités.")
+        elif min(predictions) < 10000:
+            conseils.append(f"Pour des attentes de {int(entrees)}, les prédictions sont faibles. Réduisez les coûts ou améliorez les stratégies de marketing.")
+        else:
+            conseils.append(f"Pour des attentes de {int(entrees)}, les prédictions sont moyennes. Maintenez les opérations actuelles.")
+
     # Créer le layout et afficher le graphique
     layout = go.Layout(
         title="Simulation des entrées en fonction du taux de reprise",
@@ -96,7 +104,10 @@ def generate_interactive_plot(model_file, min_entrees, max_entrees, fauteuils, r
     )
 
     fig = go.Figure(data=traces, layout=layout)
-    return pio.to_html(fig, full_html=False)
+    plot_html = pio.to_html(fig, full_html=False)
+
+    # Retourner le graphique et les conseils
+    return plot_html, conseils
 
 
 if __name__ == "__main__":

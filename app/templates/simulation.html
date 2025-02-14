@@ -21,6 +21,18 @@
         {{ plot_html|safe }}
     </div>
     {% endif %}
+
+    {% if conseils %}
+    <div class="mt-5">
+        <h3>Conseils pour la prise de décision :</h3>
+        <ul>
+            {% for conseil in conseils %}
+            <li>{{ conseil }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+
     <form method="POST" action="/simulate" id="simulationForm" oninput="checkForm()">
         <!-- Liste déroulante pour le département -->
         <div class="mb-3">
@@ -36,7 +48,8 @@
         <!-- Liste déroulante des cinémas (dynamique) -->
         <div class="mb-3">
             <label for="cinemaName" class="form-label">Nom du Cinéma</label>
-            <select class="form-control" id="cinemaName" name="cinemaName" onchange="updateFauteuils()" required>
+            <select class="form-control" id="cinemaName" name="cinemaName"
+                onchange="updateFauteuils(), updateEntrees();" required>
                 <option value="">Sélectionnez un cinéma</option>
             </select>
         </div>
@@ -61,7 +74,8 @@
             <input type="number" class="form-control" id="restrictions" name="restrictions" required>
         </div>
 
-        <button id="submitButton" style="display: none; align-items: center;" type="submit" class="btn btn-primary">Lancer la
+        <button id="submitButton" style="display: none; align-items: center;" type="submit"
+            class="btn btn-primary">Lancer la
             Simulation</button>
     </form>
 
@@ -138,6 +152,24 @@
                 .catch(error => console.error('Erreur:', error));
         } else {
             document.getElementById('fauteuils').value = '';
+        }
+    }
+
+    // Fonction pour mettre à jour les entrées minimales et maximales selon le cinéma choisi
+    function updateEntrees() {
+        let cinemaName = document.getElementById('cinemaName').value;
+        if (cinemaName !== '') {
+            fetch(`/get_entrees?cinemaName=${cinemaName}`)
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('minEntrees').value = data.min_entrees;
+                    document.getElementById('maxEntrees').value = data.max_entrees;
+                    checkForm(); // Vérifier le formulaire après la mise à jour des entrées
+                })
+                .catch(error => console.error('Erreur:', error));
+        } else {
+            document.getElementById('minEntrees').value = '';
+            document.getElementById('maxEntrees').value = '';
         }
     }
 
