@@ -1,5 +1,6 @@
 from flask import Blueprint, Flask, render_template, request, jsonify, redirect, url_for, flash
 import pandas as pd
+import joblib
 # from app.model import generate_interactive_plot  # Assurez-vous que le chemin est correct
 from scripts.predict import generate_interactive_plot
 
@@ -77,11 +78,11 @@ def simulate():
         restrictions = float(request.form["restrictions"])
 
 
-        plot_html, conseils = generate_interactive_plot("models/random_forest_model.pkl" ,min_entrees, max_entrees, fauteuils, restrictions)
+        plot_html = generate_interactive_plot("models/random_forest_model.pkl" ,min_entrees, max_entrees, fauteuils, restrictions)
 
         flash(f"Simulation réussie pour {cinema_name}.")
 
-        return render_template("simulation.html", departments=get_departments(), plot_html=plot_html, conseils=conseils)
+        return render_template("simulation.html", departments=get_departments(), plot_html=plot_html)
     except Exception as e:
         flash(f"Erreur lors de la simulation : {str(e)}", "danger")
         return redirect(url_for('routes.simulation'))

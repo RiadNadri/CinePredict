@@ -9,7 +9,7 @@ import plotly.io as pio
 def generate_interactive_plot(model_file, min_entrees, max_entrees, fauteuils, restrictions):
     model = joblib.load(model_file)
 
-    taux_reprise_values = np.linspace(0.1, 1.0, 40)
+    taux_reprise_values = np.linspace(0.1, 0.5, 40)
 
     entrees_intervals = np.linspace(min_entrees, max_entrees, 20)
 
@@ -48,4 +48,4 @@ def generate_interactive_plot(model_file, min_entrees, max_entrees, fauteuils, r
 
 if __name__ == "__main__":
     generate_interactive_plot(
-        "../models/random_forest_model.pkl", 30000, 70000, fauteuils=3642, restrictions=50)
+        "../models/random_forest_model.pkl", 50000, 100000, fauteuils=210, restrictions=10)
