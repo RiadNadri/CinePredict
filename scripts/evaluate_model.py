@@ -3,12 +3,8 @@ import joblib
 from sklearn.metrics import mean_absolute_error, r2_score
 
 def evaluate_model(model_file, X_test_file, y_test_file):
-    # Chargement du modèle et des données de test
     model = joblib.load(model_file)
     # data = pd.read_csv(data_file)
-
-    # X = data[['fauteuils', 'Multiplexe', 'entrées 2019']]
-    # y_true = data['entrées 2020']
 
     X_test = pd.read_csv(X_test_file)
     y_test = pd.read_csv(y_test_file)

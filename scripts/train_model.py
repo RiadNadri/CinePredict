@@ -16,7 +16,6 @@ def train_model(data_file, model_output):
 
     # Entraînement Random Forest Regressor
     model = RandomForestRegressor(n_estimators=200, random_state=42)
-    # model = XGBRegressor(n_estimators=100, max_depth=10, learning_rate=0.1)
     model.fit(X_train, y_train)
 
     X_test.to_csv("../data/test/X_test.csv", index=False)
